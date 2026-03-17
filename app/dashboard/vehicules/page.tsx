@@ -50,7 +50,8 @@ export default function VehiclesPage() {
             try {
                 await api(`/vehicules/${vehicle.id}`, { method: 'DELETE' });
                 fetchVehicles();
-            } catch (error) {
+            } catch (error: any) {
+                if (error?.status === 403) return;
                 alert('Erreur lors de la suppression');
             }
         }

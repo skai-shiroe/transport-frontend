@@ -56,7 +56,8 @@ export default function ExpensesPage() {
             try {
                 await api(`/depenses/${expense.id}`, { method: 'DELETE' });
                 fetchExpenses();
-            } catch (error) {
+            } catch (error: any) {
+                if (error?.status === 403) return;
                 alert('Erreur lors de la suppression');
             }
         }

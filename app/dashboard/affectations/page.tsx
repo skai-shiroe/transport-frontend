@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import api from '@/app/lib/api';
+import api, { APIError } from '@/app/lib/api';
 import DataTable from '@/app/components/DataTable';
 import AssignmentModal from '@/app/components/AssignmentModal';
 
@@ -44,7 +44,8 @@ export default function AffectationsPage() {
             try {
                 await api(`/affectations/${assignment.id}`, { method: 'DELETE' });
                 fetchAssignments();
-            } catch (error) {
+            } catch (error: any) {
+                if (error?.status === 403) return;
                 alert('Erreur lors de la suppression');
             }
         }

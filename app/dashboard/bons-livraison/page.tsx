@@ -68,7 +68,8 @@ export default function BonsLivraisonPage() {
             try {
                 await api(`/bons-livraison/${bl.id}`, { method: 'DELETE' });
                 fetchBLs();
-            } catch (error) {
+            } catch (error: any) {
+                if (error?.status === 403) return;
                 alert('Erreur lors de la suppression');
             }
         }

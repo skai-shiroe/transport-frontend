@@ -51,7 +51,8 @@ export default function CaissesPage() {
             try {
                 await api(`/caisses/${caisse.id}`, { method: 'DELETE' });
                 fetchCaisses();
-            } catch (error) {
+            } catch (error: any) {
+                if (error?.status === 403) return;
                 alert('Erreur lors de la suppression');
             }
         }

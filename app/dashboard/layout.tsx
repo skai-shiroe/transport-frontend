@@ -5,6 +5,8 @@ import { useAuth } from '@/app/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/app/components/Sidebar';
 import Header from '@/app/components/Header';
+import { PermissionProvider } from '@/app/context/PermissionContext';
+import PermissionModal from '@/app/components/PermissionModal';
 
 export default function DashboardLayout({
     children,
@@ -31,16 +33,19 @@ export default function DashboardLayout({
     if (!user) return null;
 
     return (
-        <div className="flex min-h-screen bg-brand-gray text-foreground transition-colors duration-300">
-            <Sidebar />
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-                <Header />
-                <main className="flex-1 overflow-y-auto p-6 md:p-8 animate-fade-in">
-                    <div className="max-w-7xl mx-auto">
-                        {children}
-                    </div>
-                </main>
+        <PermissionProvider>
+            <div className="flex min-h-screen bg-brand-gray text-foreground transition-colors duration-300">
+                <Sidebar />
+                <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+                    <Header />
+                    <main className="flex-1 overflow-y-auto p-6 md:p-8 animate-fade-in">
+                        <div className="max-w-7xl mx-auto">
+                            {children}
+                        </div>
+                    </main>
+                </div>
             </div>
-        </div>
+            <PermissionModal />
+        </PermissionProvider>
     );
 }

@@ -51,7 +51,8 @@ export default function ProduitsPage() {
             try {
                 await api(`/produits/${product.id}`, { method: 'DELETE' });
                 fetchProducts();
-            } catch (error) {
+            } catch (error: any) {
+                if (error?.status === 403) return;
                 alert('Erreur lors de la suppression');
             }
         }

@@ -4,6 +4,13 @@ type APIOptions = RequestInit & {
   params?: Record<string, string>;
 };
 
+export class APIError extends Error {
+  constructor(public message: string, public status: number) {
+    super(message);
+    this.name = 'APIError';
+  }
+}
+
 async function api<T>(endpoint: string, options: APIOptions = {}): Promise<T> {
   const { params, ...customConfig } = options;
   const url = new URL(`${BASE_URL}${endpoint}`);
@@ -33,11 +40,27 @@ async function api<T>(endpoint: string, options: APIOptions = {}): Promise<T> {
         localStorage.removeItem('token');
         window.location.href = '/login';
       }
-      throw new Error('Unauthorized');
+      throw new APIError('Unauthorized', 401);
+    }
+
+    if (response.status === 403) {
+      let message = 'Accès refusé : permissions insuffisantes';
+      try {
+        const errorData = await response.json();
+        message = errorData.message || message;
+      } catch (e) {
+        // Fallback message
+      }
+      
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('permission-denied', { detail: message }));
+      }
+      throw new APIError(message, 403);
     }
 
     if (!response.ok) {
       let message = 'API Error';
+      let status = response.status;
       try {
         const errorData = await response.json();
         message = errorData.message || message;
@@ -46,12 +69,16 @@ async function api<T>(endpoint: string, options: APIOptions = {}): Promise<T> {
         const text = await response.text().catch(() => '');
         if (text) message = text;
       }
-      throw new Error(message);
+      throw new APIError(message, status);
     }
 
     return await response.json() as T;
-  } catch (error) {
-    console.error('API call failed:', error);
+  } catch (error: any) {
+    if (error?.status === 403) {
+      // Don't log permission errors to console as they are handled by global popup
+    } else {
+      console.error('API call failed:', error);
+    }
     throw error;
   }
 }

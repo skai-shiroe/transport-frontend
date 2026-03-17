@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import api from '@/app/lib/api';
+import api, { APIError } from '@/app/lib/api';
 
 import { Driver } from '@/app/lib/types';
 
@@ -78,6 +78,10 @@ export default function DriverModal({ isOpen, onClose, onSuccess, driver }: Driv
             onSuccess();
             onClose();
         } catch (err: any) {
+            if (err?.status === 403) {
+                onClose();
+                return;
+            }
             setError(err.message || 'Une erreur est survenue');
         } finally {
             setLoading(false);
