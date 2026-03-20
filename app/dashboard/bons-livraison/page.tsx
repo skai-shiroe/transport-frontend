@@ -31,24 +31,24 @@ export interface BL {
     produit: { nom: string };
 }
 
-const FilterBar = ({ 
-    startDate, 
-    endDate, 
-    onStartChange, 
-    onEndChange, 
-    onClear 
-}: { 
-    startDate: string; 
-    endDate: string; 
-    onStartChange: (v: string) => void; 
-    onEndChange: (v: string) => void; 
+const FilterBar = ({
+    startDate,
+    endDate,
+    onStartChange,
+    onEndChange,
+    onClear
+}: {
+    startDate: string;
+    endDate: string;
+    onStartChange: (v: string) => void;
+    onEndChange: (v: string) => void;
     onClear: () => void;
 }) => (
     <div className="bg-white p-4 rounded-2xl border border-soft-border shadow-sm flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Période du</label>
-            <input 
-                type="date" 
+            <input
+                type="date"
                 value={startDate}
                 onChange={(e) => onStartChange(e.target.value)}
                 className="bg-slate-50 border-none rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-slate-700"
@@ -56,15 +56,15 @@ const FilterBar = ({
         </div>
         <div className="flex items-center gap-2">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">au</label>
-            <input 
-                type="date" 
+            <input
+                type="date"
                 value={endDate}
                 onChange={(e) => onEndChange(e.target.value)}
                 className="bg-slate-50 border-none rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-slate-700"
             />
         </div>
         {(startDate || endDate) && (
-            <button 
+            <button
                 onClick={onClear}
                 className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors flex items-center gap-1 ml-auto"
             >
@@ -102,11 +102,11 @@ export default function BonsLivraisonPage() {
     const filteredBls = React.useMemo(() => {
         return bls.filter(bl => {
             if (!startDate && !endDate) return true;
-            
+
             const blDate = new Date(bl.date_chargement).getTime();
             const start = startDate ? new Date(startDate).getTime() : -Infinity;
             const end = endDate ? new Date(endDate).getTime() : Infinity;
-            
+
             // Set end to end of day
             const endOfDay = endDate ? new Date(new Date(endDate).setHours(23, 59, 59, 999)).getTime() : Infinity;
 
@@ -182,11 +182,10 @@ export default function BonsLivraisonPage() {
         {
             header: 'Statut',
             accessor: (b: BL) => (
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    b.statut === 'LIVRE' ? 'bg-emerald-50 text-emerald-600' : 
-                    b.statut === 'EN_COURS' ? 'bg-indigo-50 text-indigo-600' : 
-                    'bg-amber-50 text-amber-600'
-                }`}>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${b.statut === 'LIVRE' ? 'bg-emerald-50 text-emerald-600' :
+                        b.statut === 'EN_COURS' ? 'bg-indigo-50 text-indigo-600' :
+                            'bg-amber-50 text-amber-600'
+                    }`}>
                     {b.statut}
                 </span>
             )
@@ -211,27 +210,27 @@ export default function BonsLivraisonPage() {
                 </button>
             </header>
 
-            <FilterBar 
-                startDate={startDate} 
-                endDate={endDate} 
-                onStartChange={setStartDate} 
+            <FilterBar
+                startDate={startDate}
+                endDate={endDate}
+                onStartChange={setStartDate}
                 onEndChange={setEndDate}
                 onClear={() => { setStartDate(''); setEndDate(''); }}
             />
 
-            <DataTable 
-                data={filteredBls} 
-                columns={columns} 
+            <DataTable
+                data={filteredBls}
+                columns={columns}
                 loading={loading}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
 
-            <BLModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onSuccess={fetchBLs} 
-                bl={selectedBL} 
+            <BLModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={fetchBLs}
+                bl={selectedBL}
             />
         </div>
     );

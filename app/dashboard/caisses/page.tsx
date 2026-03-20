@@ -112,8 +112,8 @@ export default function CaissesPage() {
                                     <span className="font-bold text-rose-500">-{caisse.montant_total_charge.toLocaleString()}</span>
                                 </div>
                                 <div className="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
-                                    <div 
-                                        className="bg-indigo-600 h-full rounded-full transition-all duration-500" 
+                                    <div
+                                        className="bg-indigo-600 h-full rounded-full transition-all duration-500"
                                         style={{ width: `${Math.min(100, (caisse.reste / caisse.montant_initial) * 100)}%` }}
                                     ></div>
                                 </div>
@@ -140,11 +140,11 @@ export default function CaissesPage() {
                 )}
             </div>
 
-            <CaisseModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onSuccess={fetchCaisses} 
-                caisse={selectedCaisse} 
+            <CaisseModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={fetchCaisses}
+                caisse={selectedCaisse}
             />
         </div>
     );

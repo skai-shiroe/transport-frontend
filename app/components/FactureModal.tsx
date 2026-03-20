@@ -12,7 +12,7 @@ interface Facture {
     emetteur_subtitle?: string;
     emetteur_telephone?: string;
     emetteur_email?: string;
-    
+
     // Client
     client: string;
     client_capital?: string;
@@ -24,7 +24,7 @@ interface Facture {
     client_compte_bancaire?: string;
     client_telephone?: string;
     client_email?: string;
-    
+
     trajet_description: string;
     date_emission: string;
     statut: 'BROUILLON' | 'EMISE' | 'PAYEE';
@@ -53,7 +53,7 @@ export default function FactureModal({ isOpen, onClose, onSuccess, facture }: Fa
         emetteur_subtitle: 'Commerce Général, Import-Export, (Quincaillerie, Vente de Planches et Chevrons) Prestation de Services (Transport de Marchandises, Rabotage et Sciage de Planches et Transformation Industrielle)',
         emetteur_telephone: '',
         emetteur_email: '',
-        
+
         client: '',
         client_capital: '1 000 000 000 FCFA',
         client_rccm: 'BF 2018 M 6062',
@@ -64,12 +64,12 @@ export default function FactureModal({ isOpen, onClose, onSuccess, facture }: Fa
         client_compte_bancaire: 'BF 084 01015 00725001012570',
         client_telephone: '(+226) 25 40 77 95 / 96',
         client_email: 'Contact.BF@cimentsafrique.com',
-        
+
         trajet_description: '',
         date_emission: new Date().toISOString().split('T')[0],
         statut: 'BROUILLON'
     });
-    
+
     const [availableBLs, setAvailableBLs] = useState<BL[]>([]);
     const [selectedBLIds, setSelectedBLIds] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
@@ -124,7 +124,7 @@ export default function FactureModal({ isOpen, onClose, onSuccess, facture }: Fa
     if (!isOpen) return null;
 
     const toggleBL = (id: string) => {
-        setSelectedBLIds(prev => 
+        setSelectedBLIds(prev =>
             prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
         );
     };
@@ -233,86 +233,86 @@ export default function FactureModal({ isOpen, onClose, onSuccess, facture }: Fa
                         </div>
                     </div>
 
-                        <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Client</label>
-                            <input
-                                type="text" required
-                                className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold"
-                                value={formData.client}
-                                onChange={(e) => setFormData({ ...formData, client: e.target.value })}
-                                placeholder="Nom du client (ex: CIMAF Burkina Faso)"
-                            />
-                        </div>
-                        
-                        <details className="group mt-4 mb-4 border border-soft-border rounded-xl bg-slate-50">
-                            <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-sm text-slate-700 select-none">
-                                Informations de l'Émetteur
-                                <svg className="w-5 h-5 transition-transform group-open:rotate-180 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
-                            </summary>
-                            <div className="p-4 pt-0 grid grid-cols-2 gap-4 border-t border-soft-border mt-2">
-                                <div className="space-y-1.5 col-span-2">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Nom Émetteur</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.emetteur} onChange={(e) => setFormData({...formData, emetteur: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5 col-span-2">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Sous-titre / Description Émetteur</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.emetteur_subtitle || ''} onChange={(e) => setFormData({...formData, emetteur_subtitle: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Téléphone Émetteur</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.emetteur_telephone || ''} onChange={(e) => setFormData({...formData, emetteur_telephone: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email Émetteur</label>
-                                    <input type="email" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.emetteur_email || ''} onChange={(e) => setFormData({...formData, emetteur_email: e.target.value})} />
-                                </div>
-                            </div>
-                        </details>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Client</label>
+                        <input
+                            type="text" required
+                            className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold"
+                            value={formData.client}
+                            onChange={(e) => setFormData({ ...formData, client: e.target.value })}
+                            placeholder="Nom du client (ex: CIMAF Burkina Faso)"
+                        />
+                    </div>
 
-                        <details className="group mt-4 mb-4 border border-soft-border rounded-xl bg-slate-50">
-                            <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-sm text-slate-700 select-none">
-                                Informations du Client (Mentions Légales)
-                                <svg className="w-5 h-5 transition-transform group-open:rotate-180 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
-                            </summary>
-                            <div className="p-4 pt-0 grid grid-cols-2 gap-4 border-t border-soft-border mt-2">
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Capital Social</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_capital || ''} onChange={(e) => setFormData({...formData, client_capital: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">RCCM</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_rccm || ''} onChange={(e) => setFormData({...formData, client_rccm: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">IFU</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_ifu || ''} onChange={(e) => setFormData({...formData, client_ifu: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Régime Fiscal</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_regime || ''} onChange={(e) => setFormData({...formData, client_regime: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Division Fiscale</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_division || ''} onChange={(e) => setFormData({...formData, client_division: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Compte Bancaire (BOA)</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_compte_bancaire || ''} onChange={(e) => setFormData({...formData, client_compte_bancaire: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5 col-span-2">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Adresse Complète</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_adresse || ''} onChange={(e) => setFormData({...formData, client_adresse: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Téléphone</label>
-                                    <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_telephone || ''} onChange={(e) => setFormData({...formData, client_telephone: e.target.value})} />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email</label>
-                                    <input type="email" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_email || ''} onChange={(e) => setFormData({...formData, client_email: e.target.value})} />
-                                </div>
+                    <details className="group mt-4 mb-4 border border-soft-border rounded-xl bg-slate-50">
+                        <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-sm text-slate-700 select-none">
+                            Informations de l'Émetteur
+                            <svg className="w-5 h-5 transition-transform group-open:rotate-180 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                        </summary>
+                        <div className="p-4 pt-0 grid grid-cols-2 gap-4 border-t border-soft-border mt-2">
+                            <div className="space-y-1.5 col-span-2">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Nom Émetteur</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.emetteur} onChange={(e) => setFormData({ ...formData, emetteur: e.target.value })} />
                             </div>
-                        </details>
+                            <div className="space-y-1.5 col-span-2">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Sous-titre / Description Émetteur</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.emetteur_subtitle || ''} onChange={(e) => setFormData({ ...formData, emetteur_subtitle: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Téléphone Émetteur</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.emetteur_telephone || ''} onChange={(e) => setFormData({ ...formData, emetteur_telephone: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email Émetteur</label>
+                                <input type="email" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.emetteur_email || ''} onChange={(e) => setFormData({ ...formData, emetteur_email: e.target.value })} />
+                            </div>
+                        </div>
+                    </details>
+
+                    <details className="group mt-4 mb-4 border border-soft-border rounded-xl bg-slate-50">
+                        <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-sm text-slate-700 select-none">
+                            Informations du Client (Mentions Légales)
+                            <svg className="w-5 h-5 transition-transform group-open:rotate-180 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                        </summary>
+                        <div className="p-4 pt-0 grid grid-cols-2 gap-4 border-t border-soft-border mt-2">
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Capital Social</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_capital || ''} onChange={(e) => setFormData({ ...formData, client_capital: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">RCCM</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_rccm || ''} onChange={(e) => setFormData({ ...formData, client_rccm: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">IFU</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_ifu || ''} onChange={(e) => setFormData({ ...formData, client_ifu: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Régime Fiscal</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_regime || ''} onChange={(e) => setFormData({ ...formData, client_regime: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Division Fiscale</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_division || ''} onChange={(e) => setFormData({ ...formData, client_division: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Compte Bancaire (BOA)</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_compte_bancaire || ''} onChange={(e) => setFormData({ ...formData, client_compte_bancaire: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5 col-span-2">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Adresse Complète</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_adresse || ''} onChange={(e) => setFormData({ ...formData, client_adresse: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Téléphone</label>
+                                <input type="text" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_telephone || ''} onChange={(e) => setFormData({ ...formData, client_telephone: e.target.value })} />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email</label>
+                                <input type="email" className="w-full bg-white border border-soft-border px-3 py-2 rounded-lg outline-none text-xs" value={formData.client_email || ''} onChange={(e) => setFormData({ ...formData, client_email: e.target.value })} />
+                            </div>
+                        </div>
+                    </details>
 
                     <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Bons de Livraison Disponibles</label>
@@ -323,8 +323,8 @@ export default function FactureModal({ isOpen, onClose, onSuccess, facture }: Fa
                                 availableBLs.map(bl => (
                                     <label key={bl.id} className="flex items-center justify-between p-3 hover:bg-white cursor-pointer transition-colors group">
                                         <div className="flex items-center gap-3">
-                                            <input 
-                                                type="checkbox" 
+                                            <input
+                                                type="checkbox"
                                                 className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                                                 checked={selectedBLIds.includes(bl.id)}
                                                 onChange={() => toggleBL(bl.id)}

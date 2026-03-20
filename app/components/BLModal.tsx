@@ -43,7 +43,7 @@ export default function BLModal({ isOpen, onClose, onSuccess, bl }: BLModalProps
         statut: 'EN_COURS',
         observations: ''
     });
-    
+
     const [vehicules, setVehicules] = useState<Option[]>([]);
     const [produits, setProduits] = useState<Option[]>([]);
     const [loading, setLoading] = useState(false);
@@ -58,12 +58,12 @@ export default function BLModal({ isOpen, onClose, onSuccess, bl }: BLModalProps
                 ]);
                 // We show all vehicles, but maybe only those with active assignments make sense?
                 // The backend checks for active assignment status.
-                setVehicules(vData.map(v => ({ 
-                    id: v.id, 
-                    label: `${v.immatriculation} (${v.statut})` 
+                setVehicules(vData.map(v => ({
+                    id: v.id,
+                    label: `${v.immatriculation} (${v.statut})`
                 })));
-                setProduits(pData.map(p => ({ 
-                    id: p.id, 
+                setProduits(pData.map(p => ({
+                    id: p.id,
                     label: p.nom,
                     defaultPrice: p.prix_unitaire_defaut
                 })));
@@ -110,10 +110,10 @@ export default function BLModal({ isOpen, onClose, onSuccess, bl }: BLModalProps
 
     const handleProductChange = (id: string) => {
         const prod = produits.find(p => p.id === id);
-        setFormData(prev => ({ 
-            ...prev, 
-            produit_id: id, 
-            prix_unitaire: prod?.defaultPrice || 0 
+        setFormData(prev => ({
+            ...prev,
+            produit_id: id,
+            prix_unitaire: prod?.defaultPrice || 0
         }));
     };
 

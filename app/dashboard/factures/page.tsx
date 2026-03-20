@@ -6,6 +6,19 @@ import DataTable from '@/app/components/DataTable';
 import FactureModal from '@/app/components/FactureModal';
 import InvoiceDetail from '@/app/components/InvoiceDetail';
 
+/*
+- [x] Period-based Invoice Generation
+    - [x] Update Invoice Generation Modal with Date Pickers
+    - [x] Update backend to filter delivery notes by date range
+    - [x] Add filters to the Invoices list (Client, Date range)
+
+- [/] Profit Reports Module
+    - [ ] Backend: Create Report Controller and Routes
+    - [ ] Frontend: Create Rapports page with Profit visualization
+    - [ ] Frontend: Add Charts for monthly trends
+    - [ ] Sidebar: Add link to Rapports
+*/
+
 interface Facture {
     id: string;
     numero: string;
@@ -18,24 +31,24 @@ interface Facture {
     statut: 'BROUILLON' | 'EMISE' | 'PAYEE';
 }
 
-const FilterBar = ({ 
-    startDate, 
-    endDate, 
-    onStartChange, 
-    onEndChange, 
-    onClear 
-}: { 
-    startDate: string; 
-    endDate: string; 
-    onStartChange: (v: string) => void; 
-    onEndChange: (v: string) => void; 
+const FilterBar = ({
+    startDate,
+    endDate,
+    onStartChange,
+    onEndChange,
+    onClear
+}: {
+    startDate: string;
+    endDate: string;
+    onStartChange: (v: string) => void;
+    onEndChange: (v: string) => void;
     onClear: () => void;
 }) => (
     <div className="bg-white p-4 rounded-2xl border border-soft-border shadow-sm flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Période du</label>
-            <input 
-                type="date" 
+            <input
+                type="date"
                 value={startDate}
                 onChange={(e) => onStartChange(e.target.value)}
                 className="bg-slate-50 border-none rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-slate-700"
@@ -43,15 +56,15 @@ const FilterBar = ({
         </div>
         <div className="flex items-center gap-2">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">au</label>
-            <input 
-                type="date" 
+            <input
+                type="date"
                 value={endDate}
                 onChange={(e) => onEndChange(e.target.value)}
                 className="bg-slate-50 border-none rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-slate-700"
             />
         </div>
         {(startDate || endDate) && (
-            <button 
+            <button
                 onClick={onClear}
                 className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors flex items-center gap-1 ml-auto"
             >
@@ -91,7 +104,7 @@ export default function FacturesPage() {
     const filteredFactures = React.useMemo(() => {
         return factures.filter(f => {
             if (!startDate && !endDate) return true;
-            
+
             const d = new Date(f.date_emission).getTime();
             const start = startDate ? new Date(startDate).getTime() : -Infinity;
             const end = endDate ? new Date(new Date(endDate).setHours(23, 59, 59, 999)).getTime() : Infinity;
@@ -140,17 +153,17 @@ export default function FacturesPage() {
             )
         },
         { header: 'Client', accessor: (f: Facture) => f.client },
-        { 
-            header: 'Date Emission', 
-            accessor: (f: Facture) => new Date(f.date_emission).toLocaleDateString() 
+        {
+            header: 'Date Emission',
+            accessor: (f: Facture) => new Date(f.date_emission).toLocaleDateString()
         },
-        { 
-            header: 'Montant TTC', 
+        {
+            header: 'Montant TTC',
             accessor: (f: Facture) => (
                 <span className="font-bold text-slate-900">
                     {(f.total_montant || 0).toLocaleString()} <span className="text-[10px] text-slate-400">FCFA</span>
                 </span>
-            ) 
+            )
         },
         {
             header: 'Statut',
@@ -171,20 +184,20 @@ export default function FacturesPage() {
             header: 'Actions',
             accessor: (f: Facture) => (
                 <div className="flex items-center gap-2">
-                    <button 
+                    <button
                         onClick={() => handleView(f)}
                         className="p-1.5 hover:bg-indigo-50 text-indigo-500 rounded-lg transition-colors"
                         title="Visualiser / Imprimer"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                     </button>
-                    <button 
+                    <button
                         onClick={() => handleEdit(f)}
                         className="p-1.5 hover:bg-slate-100 text-slate-400 rounded-lg transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                     </button>
-                    <button 
+                    <button
                         onClick={() => handleDelete(f)}
                         className="p-1.5 hover:bg-rose-50 text-rose-400 rounded-lg transition-colors"
                     >
@@ -213,42 +226,42 @@ export default function FacturesPage() {
                 </button>
             </header>
 
-            <FilterBar 
-                startDate={startDate} 
-                endDate={endDate} 
-                onStartChange={setStartDate} 
+            <FilterBar
+                startDate={startDate}
+                endDate={endDate}
+                onStartChange={setStartDate}
                 onEndChange={setEndDate}
                 onClear={() => { setStartDate(''); setEndDate(''); }}
             />
 
-            <DataTable 
-                data={filteredFactures} 
-                columns={columns} 
+            <DataTable
+                data={filteredFactures}
+                columns={columns}
                 loading={loading}
                 hideDefaultActions={true}
             />
 
-            <FactureModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onSuccess={fetchFactures} 
-                facture={selectedFacture} 
+            <FactureModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={fetchFactures}
+                facture={selectedFacture}
             />
 
             {/* Preview Modal */}
             {isPreviewOpen && (
                 <div className="fixed inset-0 z-[1000] bg-slate-900/60 backdrop-blur-md flex items-start justify-center overflow-y-auto p-4 md:p-12 animate-fade-in group print:p-0">
                     <div className="relative w-full max-w-[210mm] animate-slide-in">
-                        <button 
+                        <button
                             onClick={() => setIsPreviewOpen(false)}
                             className="fixed right-8 top-8 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all print-hide z-50 backdrop-blur-xl"
                         >
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
-                        
-                        <InvoiceDetail 
-                            facture={fullFacture} 
-                            onClose={() => setIsPreviewOpen(false)} 
+
+                        <InvoiceDetail
+                            facture={fullFacture}
+                            onClose={() => setIsPreviewOpen(false)}
                         />
                     </div>
                 </div>

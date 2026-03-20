@@ -29,19 +29,19 @@ export default function InvoiceDetail({ facture, onClose }: InvoiceDetailProps) 
             setIsGeneratingPdf(true);
             const html2pdf = (await import('html2pdf.js')).default;
             const element = document.getElementById('invoice-content');
-            
+
             if (!element) return;
-            
+
             // Temporarily hide buttons
             const buttonsContainer = element.querySelector('.print-hide');
             if (buttonsContainer) (buttonsContainer as HTMLElement).style.display = 'none';
 
             const opt = {
-                margin:       0, // mm (rely on element internal padding)
-                filename:     `Facture_${facture.numero}.pdf`,
-                image:        { type: 'jpeg' as const, quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const }
+                margin: 0, // mm (rely on element internal padding)
+                filename: `Facture_${facture.numero}.pdf`,
+                image: { type: 'jpeg' as const, quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const }
             };
 
             await html2pdf().set(opt).from(element).save();
@@ -165,14 +165,14 @@ export default function InvoiceDetail({ facture, onClose }: InvoiceDetailProps) 
                 <div className="text-center">
                     <p className="underline mb-24 uppercase">LA DIRECTION</p>
                     <div className="mb-16" />
-    <p className="mt-12">AGBEKO André</p>
+                    <p className="mt-12">AGBEKO André</p>
                 </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex justify-center gap-4 mt-12 print-hide">
                 {onClose && (
-                    <button 
+                    <button
                         onClick={onClose}
                         className="bg-white text-slate-500 border border-soft-border px-6 py-3 rounded-2xl font-bold hover:bg-slate-50 transition-all flex items-center gap-2"
                     >
@@ -180,14 +180,14 @@ export default function InvoiceDetail({ facture, onClose }: InvoiceDetailProps) 
                         Retour
                     </button>
                 )}
-                <button 
+                <button
                     onClick={() => window.print()}
                     className="bg-slate-100 text-slate-700 px-6 py-3 rounded-2xl font-bold hover:bg-slate-200 transition-all flex items-center gap-2"
                 >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                     Imprimer Version Classique
                 </button>
-                <button 
+                <button
                     onClick={handleDownloadPDF}
                     disabled={isGeneratingPdf}
                     className="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold shadow-lg hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-all flex items-center gap-2"

@@ -81,9 +81,8 @@ export default function AffectationsPage() {
         {
             header: 'Statut',
             accessor: (a: AssignmentWithRelations) => (
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    a.statut === 'EN_COURS' ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-100 text-slate-500'
-                }`}>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${a.statut === 'EN_COURS' ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-100 text-slate-500'
+                    }`}>
                     {a.statut}
                 </span>
             )
@@ -108,19 +107,19 @@ export default function AffectationsPage() {
                 </button>
             </header>
 
-            <DataTable 
-                data={assignments} 
-                columns={columns} 
+            <DataTable
+                data={assignments}
+                columns={columns}
                 loading={loading}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
 
-            <AssignmentModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onSuccess={fetchAssignments} 
-                assignment={selectedAssignment} 
+            <AssignmentModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={fetchAssignments}
+                assignment={selectedAssignment}
             />
         </div>
     );

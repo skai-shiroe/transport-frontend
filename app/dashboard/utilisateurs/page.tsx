@@ -129,19 +129,19 @@ export default function UsersPage() {
                 </button>
             </header>
 
-            <DataTable 
-                data={users} 
-                columns={columns} 
+            <DataTable
+                data={users}
+                columns={columns}
                 loading={loading}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
 
-            <UserModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onSuccess={fetchUsers} 
-                user={selectedUser} 
+            <UserModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={fetchUsers}
+                user={selectedUser}
             />
         </div>
     );

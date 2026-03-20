@@ -74,8 +74,8 @@ async function api<T>(endpoint: string, options: APIOptions = {}): Promise<T> {
 
     return await response.json() as T;
   } catch (error: any) {
-    if (error?.status === 403) {
-      // Don't log permission errors to console as they are handled by global popup
+    if (error?.status === 403 || error?.status === 404) {
+      // Don't log permission or not found errors to console as they are handled by UI/modals
     } else {
       console.error('API call failed:', error);
     }

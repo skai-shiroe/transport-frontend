@@ -34,8 +34,8 @@ export default function DataTable<T extends { id: string | number }>({
   const filteredData = React.useMemo(() => {
     if (!searchTerm) return data;
     const lowerSearch = searchTerm.toLowerCase();
-    return data.filter(item => 
-      Object.values(item).some(val => 
+    return data.filter(item =>
+      Object.values(item).some(val =>
         String(val).toLowerCase().includes(lowerSearch)
       )
     );

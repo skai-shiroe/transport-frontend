@@ -11,6 +11,7 @@ interface Expense {
     designation: string;
     montant: number;
     caisse_id: string;
+    client?: string;
 }
 
 interface Option { id: string; label: string }
@@ -29,26 +30,30 @@ export default function ExpenseModal({ isOpen, onClose, onSuccess, expense }: Ex
         chauffeur_id: '',
         designation: '',
         montant: 0,
-        caisse_id: ''
+        caisse_id: '',
+        client: 'Général'
     });
-    
+
     const [vehicules, setVehicules] = useState<Option[]>([]);
     const [chauffeurs, setChauffeurs] = useState<Option[]>([]);
     const [caisses, setCaisses] = useState<Option[]>([]);
+    const [clientNames, setClientNames] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [vData, cData, csData] = await Promise.all([
+                const [vData, cData, csData, clData] = await Promise.all([
                     api<any[]>('/vehicules'),
                     api<any[]>('/chauffeurs'),
-                    api<any[]>('/caisses')
+                    api<any[]>('/caisses'),
+                    api<string[]>('/reports/clients')
                 ]);
                 setVehicules(vData.map(v => ({ id: v.id, label: v.immatriculation })));
                 setChauffeurs(cData.map(c => ({ id: c.id, label: `${c.nom} ${c.prenom}` })));
                 setCaisses(csData.map(cs => ({ id: cs.id, label: `${cs.periode} (Reste: ${cs.reste})` })));
+                setClientNames(clData || []);
             } catch (err) {
                 console.error('Failed to fetch expense options:', err);
             }
@@ -67,7 +72,8 @@ export default function ExpenseModal({ isOpen, onClose, onSuccess, expense }: Ex
                     chauffeur_id: '',
                     designation: '',
                     montant: 0,
-                    caisse_id: ''
+                    caisse_id: '',
+                    client: 'Général'
                 });
             }
             setError('');
@@ -160,6 +166,18 @@ export default function ExpenseModal({ isOpen, onClose, onSuccess, expense }: Ex
                             onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
                             placeholder="ex: Carburant Voyage Lomé"
                         />
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Attribuer à un Client</label>
+                        <select
+                            className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold appearance-none cursor-pointer"
+                            value={formData.client}
+                            onChange={(e) => setFormData({ ...formData, client: e.target.value })}
+                        >
+                            <option value="Général">Général (Dépense globale)</option>
+                            {clientNames.map(name => <option key={name} value={name}>{name}</option>)}
+                        </select>
                     </div>
 
                     <div className="space-y-1.5">

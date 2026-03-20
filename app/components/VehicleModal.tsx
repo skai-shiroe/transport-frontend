@@ -146,11 +146,10 @@ export default function VehicleModal({ isOpen, onClose, onSuccess, vehicle }: Ve
                                     key={s}
                                     type="button"
                                     onClick={() => setFormData({ ...formData, statut: s as any })}
-                                    className={`py-2 rounded-xl text-[10px] font-bold transition-all border ${
-                                        formData.statut === s 
-                                        ? 'bg-indigo-50 border-indigo-200 text-indigo-600 shadow-sm' 
-                                        : 'bg-white border-soft-border text-slate-400 hover:bg-slate-50'
-                                    }`}
+                                    className={`py-2 rounded-xl text-[10px] font-bold transition-all border ${formData.statut === s
+                                            ? 'bg-indigo-50 border-indigo-200 text-indigo-600 shadow-sm'
+                                            : 'bg-white border-soft-border text-slate-400 hover:bg-slate-50'
+                                        }`}
                                 >
                                     {s.replace('_', ' ')}
                                 </button>

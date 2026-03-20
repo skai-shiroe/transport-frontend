@@ -73,12 +73,12 @@ export default function ProduitsPage() {
                 </div>
             )
         },
-        { 
-            header: 'Unité', 
+        {
+            header: 'Unité',
             accessor: (p: Product) => <span className="text-[10px] font-bold text-slate-400">{p.unite}</span>
         },
-        { 
-            header: 'Prix Unitaire', 
+        {
+            header: 'Prix Unitaire',
             accessor: (p: Product) => (
                 <span className="font-bold text-slate-900">
                     {p.prix_unitaire_defaut.toLocaleString()} <span className="text-[10px] text-slate-400 uppercase">FCFA</span>
@@ -113,19 +113,19 @@ export default function ProduitsPage() {
                 </button>
             </header>
 
-            <DataTable 
-                data={products} 
-                columns={columns} 
+            <DataTable
+                data={products}
+                columns={columns}
                 loading={loading}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
 
-            <ProductModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onSuccess={fetchProducts} 
-                product={selectedProduct} 
+            <ProductModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={fetchProducts}
+                product={selectedProduct}
             />
         </div>
     );

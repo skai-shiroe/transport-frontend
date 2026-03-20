@@ -72,8 +72,8 @@ export default function VehiclesPage() {
                 </div>
             )
         },
-        { 
-            header: 'Type', 
+        {
+            header: 'Type',
             accessor: (v: Vehicle) => (
                 <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-lg">
                     {v.type}
@@ -116,19 +116,19 @@ export default function VehiclesPage() {
                 </button>
             </header>
 
-            <DataTable 
-                data={vehicles} 
-                columns={columns} 
+            <DataTable
+                data={vehicles}
+                columns={columns}
                 loading={loading}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
 
-            <VehicleModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onSuccess={fetchVehicles} 
-                vehicle={selectedVehicle} 
+            <VehicleModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={fetchVehicles}
+                vehicle={selectedVehicle}
             />
         </div>
     );

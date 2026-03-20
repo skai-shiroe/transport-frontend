@@ -66,8 +66,8 @@ export default function DriversPage() {
                 </div>
             )
         },
-        { 
-            header: 'Contact', 
+        {
+            header: 'Contact',
             accessor: (d: DriverWithId) => (
                 <div className="flex flex-col">
                     <span className="text-xs font-medium text-slate-600">{d.telephone_1}</span>
@@ -87,10 +87,9 @@ export default function DriversPage() {
         {
             header: 'Statut',
             accessor: (d: DriverWithId) => (
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    d.statut === 'ACTIF' ? 'bg-emerald-50 text-emerald-600' : 
-                    d.statut === 'SUSPENDU' ? 'bg-rose-50 text-rose-600' : 'bg-slate-100 text-slate-500'
-                }`}>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${d.statut === 'ACTIF' ? 'bg-emerald-50 text-emerald-600' :
+                        d.statut === 'SUSPENDU' ? 'bg-rose-50 text-rose-600' : 'bg-slate-100 text-slate-500'
+                    }`}>
                     {d.statut}
                 </span>
             )
@@ -115,19 +114,19 @@ export default function DriversPage() {
                 </button>
             </header>
 
-            <DataTable 
-                data={drivers} 
-                columns={columns} 
+            <DataTable
+                data={drivers}
+                columns={columns}
                 loading={loading}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
 
-            <DriverModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onSuccess={fetchDrivers} 
-                driver={selectedDriver} 
+            <DriverModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={fetchDrivers}
+                driver={selectedDriver}
             />
         </div>
     );
