@@ -18,6 +18,50 @@ interface Facture {
     statut: 'BROUILLON' | 'EMISE' | 'PAYEE';
 }
 
+const FilterBar = ({ 
+    startDate, 
+    endDate, 
+    onStartChange, 
+    onEndChange, 
+    onClear 
+}: { 
+    startDate: string; 
+    endDate: string; 
+    onStartChange: (v: string) => void; 
+    onEndChange: (v: string) => void; 
+    onClear: () => void;
+}) => (
+    <div className="bg-white p-4 rounded-2xl border border-soft-border shadow-sm flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-2">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Période du</label>
+            <input 
+                type="date" 
+                value={startDate}
+                onChange={(e) => onStartChange(e.target.value)}
+                className="bg-slate-50 border-none rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-slate-700"
+            />
+        </div>
+        <div className="flex items-center gap-2">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">au</label>
+            <input 
+                type="date" 
+                value={endDate}
+                onChange={(e) => onEndChange(e.target.value)}
+                className="bg-slate-50 border-none rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-slate-700"
+            />
+        </div>
+        {(startDate || endDate) && (
+            <button 
+                onClick={onClear}
+                className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors flex items-center gap-1 ml-auto"
+            >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                Effacer les filtres
+            </button>
+        )}
+    </div>
+);
+
 export default function FacturesPage() {
     const [factures, setFactures] = useState<Facture[]>([]);
     const [loading, setLoading] = useState(true);
@@ -25,6 +69,8 @@ export default function FacturesPage() {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [selectedFacture, setSelectedFacture] = useState<Facture | null>(null);
     const [fullFacture, setFullFacture] = useState<any>(null);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     const fetchFactures = async () => {
         setLoading(true);
@@ -41,6 +87,18 @@ export default function FacturesPage() {
     useEffect(() => {
         fetchFactures();
     }, []);
+
+    const filteredFactures = React.useMemo(() => {
+        return factures.filter(f => {
+            if (!startDate && !endDate) return true;
+            
+            const d = new Date(f.date_emission).getTime();
+            const start = startDate ? new Date(startDate).getTime() : -Infinity;
+            const end = endDate ? new Date(new Date(endDate).setHours(23, 59, 59, 999)).getTime() : Infinity;
+
+            return d >= start && d <= end;
+        });
+    }, [factures, startDate, endDate]);
 
     const handleAdd = () => {
         setSelectedFacture(null);
@@ -155,8 +213,16 @@ export default function FacturesPage() {
                 </button>
             </header>
 
+            <FilterBar 
+                startDate={startDate} 
+                endDate={endDate} 
+                onStartChange={setStartDate} 
+                onEndChange={setEndDate}
+                onClear={() => { setStartDate(''); setEndDate(''); }}
+            />
+
             <DataTable 
-                data={factures} 
+                data={filteredFactures} 
                 columns={columns} 
                 loading={loading}
                 hideDefaultActions={true}
