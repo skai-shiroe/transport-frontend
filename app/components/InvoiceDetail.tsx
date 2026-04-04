@@ -115,13 +115,13 @@ export default function InvoiceDetail({ facture, onClose }: InvoiceDetailProps) 
             <table className="w-full border-collapse border text-[10px] mb-8" style={{ borderColor: '#0f172a' }}>
                 <thead>
                     <tr style={{ backgroundColor: '#f8fafc' }}>
-                        <th className="border p-2 text-center w-12" style={{ borderColor: '#0f172a' }}>N° d'ordre</th>
-                        <th className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>Véhicule</th>
-                        <th className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>Date de chargement</th>
+                        <th className="border p-2 text-center w-12" style={{ borderColor: '#0f172a' }}>N°</th>
+                        <th className="border p-2 text-center whitespace-nowrap" style={{ borderColor: '#0f172a' }}>Véhicule</th>
+                        <th className="border p-2 text-center whitespace-nowrap" style={{ borderColor: '#0f172a' }}>Date de chargement</th>
                         <th className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>Produit</th>
-                        <th className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>Date de déchargement</th>
-                        <th className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>Bon de livraison</th>
-                        <th className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>Poids d'arrivé</th>
+                        <th className="border p-2 text-center whitespace-nowrap" style={{ borderColor: '#0f172a' }}>Date de déchargement</th>
+                        <th className="border p-2 text-center whitespace-nowrap" style={{ borderColor: '#0f172a' }}>Bon de livraison</th>
+                        <th className="border p-2 text-center whitespace-nowrap" style={{ borderColor: '#0f172a' }}>Poids d'arrivé</th>
                         <th className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>P.U</th>
                         <th className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>Montant</th>
                     </tr>
@@ -130,11 +130,11 @@ export default function InvoiceDetail({ facture, onClose }: InvoiceDetailProps) 
                     {bls.map((bl: any, index: number) => (
                         <tr key={bl.id}>
                             <td className="border p-2 text-center font-bold" style={{ borderColor: '#0f172a' }}>{index + 1}</td>
-                            <td className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>{bl.vehicule?.immatriculation || '-'}</td>
-                            <td className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>{bl.date_chargement ? new Date(bl.date_chargement).toLocaleDateString() : '-'}</td>
+                            <td className="border p-2 text-center whitespace-nowrap" style={{ borderColor: '#0f172a' }}>{bl.vehicule?.immatriculation || '-'}</td>
+                            <td className="border p-2 text-center whitespace-nowrap" style={{ borderColor: '#0f172a' }}>{bl.date_chargement ? new Date(bl.date_chargement).toLocaleDateString() : '-'}</td>
                             <td className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>{bl.produit?.nom || 'Marchandise'}</td>
-                            <td className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>{bl.date_livraison ? new Date(bl.date_livraison).toLocaleDateString() : '-'}</td>
-                            <td className="border p-2 text-center font-mono" style={{ borderColor: '#0f172a' }}>{bl.numero}</td>
+                            <td className="border p-2 text-center whitespace-nowrap" style={{ borderColor: '#0f172a' }}>{bl.date_livraison ? new Date(bl.date_livraison).toLocaleDateString() : '-'}</td>
+                            <td className="border p-2 text-center font-mono whitespace-nowrap" style={{ borderColor: '#0f172a' }}>{bl.numero}</td>
                             <td className="border p-2 text-center font-bold" style={{ borderColor: '#0f172a' }}>{bl.poids_arrive?.toLocaleString()}</td>
                             <td className="border p-2 text-center" style={{ borderColor: '#0f172a' }}>{(bl.montant / bl.poids_arrive || 0).toLocaleString()}</td>
                             <td className="border p-2 text-center font-bold" style={{ borderColor: '#0f172a' }}>{bl.montant?.toLocaleString()}</td>
