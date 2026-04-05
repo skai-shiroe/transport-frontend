@@ -12,6 +12,7 @@ interface User {
     nom: string;
     prenom: string;
     email: string;
+    telephone?: string;
     role: 'ADMIN' | 'GESTIONNAIRE' | 'LECTEUR';
     created_at: string;
 }
@@ -102,6 +103,10 @@ export default function UsersPage() {
                     </span>
                 );
             }
+        },
+        {
+            header: 'Téléphone',
+            accessor: (u: User) => u.telephone || '-'
         },
         {
             header: 'Créé le',

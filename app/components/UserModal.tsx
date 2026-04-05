@@ -8,6 +8,7 @@ interface User {
     nom: string;
     prenom: string;
     email: string;
+    telephone?: string;
     mot_de_passe?: string;
     role: 'ADMIN' | 'GESTIONNAIRE' | 'LECTEUR';
 }
@@ -24,6 +25,7 @@ export default function UserModal({ isOpen, onClose, onSuccess, user }: UserModa
         nom: '',
         prenom: '',
         email: '',
+        telephone: '',
         mot_de_passe: '',
         role: 'LECTEUR'
     });
@@ -37,13 +39,16 @@ export default function UserModal({ isOpen, onClose, onSuccess, user }: UserModa
                     nom: user.nom,
                     prenom: user.prenom,
                     email: user.email,
-                    role: user.role
+                    telephone: (user as any).telephone || '',
+                    role: user.role,
+                    mot_de_passe: ''
                 });
             } else {
                 setFormData({
                     nom: '',
                     prenom: '',
                     email: '',
+                    telephone: '',
                     mot_de_passe: '',
                     role: 'LECTEUR'
                 });
@@ -61,13 +66,18 @@ export default function UserModal({ isOpen, onClose, onSuccess, user }: UserModa
 
         try {
             if (user?.id) {
+                const updateData: any = {
+                    nom: formData.nom,
+                    prenom: formData.prenom,
+                    role: formData.role,
+                    telephone: formData.telephone
+                };
+                if (formData.mot_de_passe) {
+                    updateData.mot_de_passe = formData.mot_de_passe;
+                }
                 await api(`/utilisateurs/${user.id}`, {
                     method: 'PUT',
-                    body: JSON.stringify({
-                        nom: formData.nom,
-                        prenom: formData.prenom,
-                        role: formData.role
-                    }),
+                    body: JSON.stringify(updateData),
                 });
             } else {
                 await api('/utilisateurs', {
@@ -142,18 +152,30 @@ export default function UserModal({ isOpen, onClose, onSuccess, user }: UserModa
                         />
                     </div>
 
-                    {!user && (
-                        <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Mot de passe</label>
-                            <input
-                                type="password" required
-                                className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-mono"
-                                value={formData.mot_de_passe}
-                                onChange={(e) => setFormData({ ...formData, mot_de_passe: e.target.value })}
-                                placeholder="••••••••"
-                            />
-                        </div>
-                    )}
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Téléphone (WhatsApp)</label>
+                        <input
+                            type="text"
+                            className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold"
+                            value={formData.telephone}
+                            onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
+                            placeholder="ex: +228 90 00 00 00"
+                        />
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+                            {user ? 'Changer le mot de passe (optionnel)' : 'Mot de passe'}
+                        </label>
+                        <input
+                            type="password"
+                            required={!user}
+                            className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-mono"
+                            value={formData.mot_de_passe}
+                            onChange={(e) => setFormData({ ...formData, mot_de_passe: e.target.value })}
+                            placeholder={user ? 'Laisser vide pour garder l\'actuel' : '••••••••'}
+                        />
+                    </div>
 
                     <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Rôle</label>

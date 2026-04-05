@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import api from '@/app/lib/api';
+import NotificationAlertModal from './NotificationAlertModal';
 
 interface Expense {
     id?: string;
     date: string;
-    vehicule_id: string;
-    chauffeur_id: string;
+    vehicule_id?: string;
+    chauffeur_id?: string;
+    utilisateur_id?: string;
     designation: string;
     montant: number;
     caisse_id: string;
@@ -36,22 +38,27 @@ export default function ExpenseModal({ isOpen, onClose, onSuccess, expense }: Ex
 
     const [vehicules, setVehicules] = useState<Option[]>([]);
     const [chauffeurs, setChauffeurs] = useState<Option[]>([]);
+    const [utilisateurs, setUtilisateurs] = useState<Option[]>([]);
     const [caisses, setCaisses] = useState<Option[]>([]);
     const [clientNames, setClientNames] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [alertData, setAlertData] = useState<any>(null);
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [vData, cData, csData, clData] = await Promise.all([
+                const [vData, cData, uData, csData, clData] = await Promise.all([
                     api<any[]>('/vehicules'),
                     api<any[]>('/chauffeurs'),
+                    api<any[]>('/utilisateurs'),
                     api<any[]>('/caisses'),
                     api<string[]>('/reports/clients')
                 ]);
                 setVehicules(vData.map(v => ({ id: v.id, label: v.immatriculation })));
                 setChauffeurs(cData.map(c => ({ id: c.id, label: `${c.nom} ${c.prenom}` })));
+                setUtilisateurs(uData.map(u => ({ id: u.id, label: `${u.nom} ${u.prenom} (${u.role})` })));
                 setCaisses(csData.map(cs => ({ id: cs.id, label: `${cs.periode} (Reste: ${cs.reste})` })));
                 setClientNames(clData || []);
             } catch (err) {
@@ -70,6 +77,7 @@ export default function ExpenseModal({ isOpen, onClose, onSuccess, expense }: Ex
                     date: new Date().toISOString().split('T')[0],
                     vehicule_id: '',
                     chauffeur_id: '',
+                    utilisateur_id: '',
                     designation: '',
                     montant: 0,
                     caisse_id: '',
@@ -87,20 +95,39 @@ export default function ExpenseModal({ isOpen, onClose, onSuccess, expense }: Ex
         setLoading(true);
         setError('');
 
+        const dataToSend = {
+            ...formData,
+            vehicule_id: formData.vehicule_id || null,
+            chauffeur_id: formData.chauffeur_id || null,
+            utilisateur_id: formData.utilisateur_id || null,
+        };
+
         try {
             if (expense?.id) {
-                await api(`/depenses/${expense.id}`, {
+                const res = await api<any>(`/depenses/${expense.id}`, {
                     method: 'PUT',
-                    body: JSON.stringify(formData),
+                    body: JSON.stringify(dataToSend),
                 });
+                if (res.alert) {
+                    setAlertData(res.alert);
+                    setIsAlertOpen(true);
+                } else {
+                    onSuccess();
+                    onClose();
+                }
             } else {
-                await api('/depenses', {
+                const res = await api<any>('/depenses', {
                     method: 'POST',
-                    body: JSON.stringify(formData),
+                    body: JSON.stringify(dataToSend),
                 });
+                if (res.alert) {
+                    setAlertData(res.alert);
+                    setIsAlertOpen(true);
+                } else {
+                    onSuccess();
+                    onClose();
+                }
             }
-            onSuccess();
-            onClose();
         } catch (err: any) {
             setError(err.message || 'Une erreur est survenue');
         } finally {
@@ -180,29 +207,41 @@ export default function ExpenseModal({ isOpen, onClose, onSuccess, expense }: Ex
                         </select>
                     </div>
 
-                    <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Lier à un Véhicule</label>
-                        <select
-                            required
-                            className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold appearance-none cursor-pointer"
-                            value={formData.vehicule_id}
-                            onChange={(e) => setFormData({ ...formData, vehicule_id: e.target.value })}
-                        >
-                            <option value="">Sélectionner un véhicule</option>
-                            {vehicules.map(v => <option key={v.id} value={v.id}>{v.label}</option>)}
-                        </select>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Lier à un Véhicule</label>
+                            <select
+                                className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold appearance-none cursor-pointer"
+                                value={formData.vehicule_id}
+                                onChange={(e) => setFormData({ ...formData, vehicule_id: e.target.value })}
+                            >
+                                <option value="">Aucun véhicule</option>
+                                {vehicules.map(v => <option key={v.id} value={v.id}>{v.label}</option>)}
+                            </select>
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Lier à un Chauffeur</label>
+                            <select
+                                className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold appearance-none cursor-pointer"
+                                value={formData.chauffeur_id}
+                                onChange={(e) => setFormData({ ...formData, chauffeur_id: e.target.value })}
+                            >
+                                <option value="">Aucun chauffeur</option>
+                                {chauffeurs.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                            </select>
+                        </div>
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Lier à un Chauffeur</label>
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Lier à un Utilisateur (Bénéficiaire interne)</label>
                         <select
-                            required
                             className="w-full bg-slate-50 border border-soft-border px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold appearance-none cursor-pointer"
-                            value={formData.chauffeur_id}
-                            onChange={(e) => setFormData({ ...formData, chauffeur_id: e.target.value })}
+                            value={formData.utilisateur_id}
+                            onChange={(e) => setFormData({ ...formData, utilisateur_id: e.target.value })}
                         >
-                            <option value="">Sélectionner un chauffeur</option>
-                            {chauffeurs.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                            <option value="">Aucun utilisateur</option>
+                            {utilisateurs.map(u => <option key={u.id} value={u.id}>{u.label}</option>)}
                         </select>
                     </div>
 
@@ -241,6 +280,16 @@ export default function ExpenseModal({ isOpen, onClose, onSuccess, expense }: Ex
                     </div>
                 </form>
             </div>
+            
+            <NotificationAlertModal 
+                isOpen={isAlertOpen} 
+                onClose={() => {
+                    setIsAlertOpen(false);
+                    onSuccess();
+                    onClose();
+                }} 
+                alert={alertData}
+            />
         </div>
     );
 }

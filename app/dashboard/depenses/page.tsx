@@ -11,11 +11,13 @@ interface Expense {
     date: string;
     vehicule_id: string;
     chauffeur_id: string;
+    utilisateur_id?: string;
     designation: string;
     montant: number;
     caisse_id: string;
     vehicule: { immatriculation: string };
     chauffeur: { nom: string; prenom: string };
+    utilisateur?: { nom: string; prenom: string };
     caisse: { periode: string };
 }
 
@@ -76,11 +78,24 @@ export default function ExpensesPage() {
             )
         },
         {
-            header: 'Véhicule & Chauffeur',
+            header: 'Bénéficiaire',
             accessor: (e: Expense) => (
-                <div>
-                    <p className="text-xs font-bold text-slate-700">{e.vehicule?.immatriculation}</p>
-                    <p className="text-[10px] text-slate-400">{e.chauffeur?.nom} {e.chauffeur?.prenom}</p>
+                <div className="flex flex-col">
+                    {e.utilisateur && (
+                        <div className="flex items-center gap-1.5 mb-1">
+                            <span className="px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-600 text-[10px] font-bold border border-indigo-100">UTILISATEUR</span>
+                            <p className="text-xs font-bold text-slate-700">{e.utilisateur.nom} {e.utilisateur.prenom}</p>
+                        </div>
+                    )}
+                    {e.vehicule && (
+                        <p className="text-xs font-bold text-slate-700">Véhicule: {e.vehicule.immatriculation}</p>
+                    )}
+                    {e.chauffeur && (
+                        <p className="text-[10px] text-slate-400">Chauffeur: {e.chauffeur.nom} {e.chauffeur.prenom}</p>
+                    )}
+                    {!e.utilisateur && !e.vehicule && !e.chauffeur && (
+                        <span className="text-[10px] text-slate-400 italic">Dépense générale</span>
+                    )}
                 </div>
             )
         },

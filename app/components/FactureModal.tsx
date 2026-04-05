@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import api from '@/app/lib/api';
+import NotificationAlertModal from './NotificationAlertModal';
 
 interface Facture {
     id?: string;
@@ -74,6 +75,8 @@ export default function FactureModal({ isOpen, onClose, onSuccess, facture }: Fa
     const [selectedBLIds, setSelectedBLIds] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [alertData, setAlertData] = useState<any>(null);
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
 
     useEffect(() => {
         const fetchBLs = async () => {
@@ -157,17 +160,22 @@ export default function FactureModal({ isOpen, onClose, onSuccess, facture }: Fa
                 statut: formData.statut
             };
 
-            let savedFacture: Facture;
+            let savedFacture: any;
+            let alertFromApi = null;
             if (facture?.id) {
-                savedFacture = await api<Facture>(`/factures/${facture.id}`, {
+                const res = await api<any>(`/factures/${facture.id}`, {
                     method: 'PUT',
                     body: JSON.stringify(payload),
                 });
+                savedFacture = res;
+                alertFromApi = res.alert;
             } else {
-                savedFacture = await api<Facture>('/factures', {
+                const res = await api<any>('/factures', {
                     method: 'POST',
                     body: JSON.stringify(payload),
                 });
+                savedFacture = res;
+                alertFromApi = res.alert;
             }
 
             // Associate selected BLs
@@ -178,8 +186,13 @@ export default function FactureModal({ isOpen, onClose, onSuccess, facture }: Fa
                 });
             }
 
-            onSuccess();
-            onClose();
+            if (alertFromApi) {
+                setAlertData(alertFromApi);
+                setIsAlertOpen(true);
+            } else {
+                onSuccess();
+                onClose();
+            }
         } catch (err: any) {
             setError(err.message || 'Une erreur est survenue');
         } finally {
@@ -402,6 +415,16 @@ export default function FactureModal({ isOpen, onClose, onSuccess, facture }: Fa
                     </div>
                 </form>
             </div>
+
+            <NotificationAlertModal 
+                isOpen={isAlertOpen} 
+                onClose={() => {
+                    setIsAlertOpen(false);
+                    onSuccess();
+                    onClose();
+                }} 
+                alert={alertData}
+            />
         </div>
     );
 }
