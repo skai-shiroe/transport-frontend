@@ -35,9 +35,13 @@ export default function DashboardLayout({
     return (
         <PermissionProvider>
             <div className="flex min-h-screen bg-brand-gray text-foreground transition-colors duration-300">
-                <Sidebar />
+                <div className="no-print">
+                    <Sidebar />
+                </div>
                 <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-                    <Header />
+                    <div className="no-print">
+                        <Header />
+                    </div>
                     <main className="flex-1 overflow-y-auto p-6 md:p-8 animate-fade-in">
                         <div className="max-w-7xl mx-auto">
                             {children}

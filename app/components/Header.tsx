@@ -15,7 +15,7 @@ export default function Header() {
             </div>
 
             <div className="flex items-center gap-4">
-                <button
+                {/* <button
                     onClick={toggleTheme}
                     className="p-2 rounded-lg hover:bg-slate-50 transition-all text-slate-500 hover:text-slate-900 border border-transparent hover:border-soft-border"
                     title={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
@@ -29,7 +29,7 @@ export default function Header() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                     )}
-                </button>
+                </button> */}
 
                 <div className="h-8 w-[1px] bg-soft-border mx-2"></div>
 
