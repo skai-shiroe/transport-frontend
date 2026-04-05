@@ -25,10 +25,12 @@ export default function Sidebar() {
 
     return (
         <aside className="w-64 border-r border-soft-border bg-white flex flex-col hidden lg:flex">
-            <div className="p-6">
-                <h1 className="text-xl font-display font-bold tracking-tight text-gradient">Transport CRM</h1>
-                <p className="text-[10px] text-slate-400 font-medium uppercase tracking-widest mt-1">Gestion Logistique</p>
-            </div>
+            <a href="http://localhost:3001/dashboard">
+                <div className="p-6">
+                    <h1 className="text-xl font-display font-bold tracking-tight text-gradient">GOD IS GOOD</h1>
+                    <p className="text-[10px] text-slate-400 font-medium uppercase tracking-widest mt-1 ">ANDRE GROUP</p>
+                </div>
+            </a>
 
             <nav className="flex-1 px-3 space-y-1 py-4 overflow-y-auto">
                 {navItems.map((item) => {

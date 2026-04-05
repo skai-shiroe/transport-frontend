@@ -13,6 +13,12 @@
   --color-soft-slate: #f1f5f9;
   --color-soft-border: rgba(0, 0, 0, 0.05);
 
+  --color-bi-chart-1: #6366f1; /* Indigo */
+  --color-bi-chart-2: #10b981; /* Emerald */
+  --color-bi-chart-3: #f59e0b; /* Amber */
+  --color-bi-chart-4: #ef4444; /* Rose */
+  --color-bi-chart-5: #3b82f6; /* Blue */
+
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
 }
@@ -84,6 +90,14 @@
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .bg-bi-gradient {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.5) 100%);
+  }
+
+  .dark .bg-bi-gradient {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.5) 100%);
   }
 
   @keyframes slideIn {
